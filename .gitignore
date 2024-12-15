@@ -1,0 +1,9 @@
+# Virtual environment
+venv/
+
+#Bytecode ppython
+__pycache__/
+*.pyc
+
+#Database
+db.sqlite3
