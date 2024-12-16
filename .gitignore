@@ -1,5 +1,9 @@
 # Virtual environment
-todoenv/
+todovenv/
+env/
+venv/
+*.env/
+*.venv/
 
 #Bytecode ppython
 __pycache__/
