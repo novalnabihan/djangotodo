@@ -23,21 +23,21 @@ class TaskList(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'task_list'
 
-class TaskDetail(DetailView):
+class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'task'
     
-class TaskCreate(CreateView):
+class TaskCreate(LoginRequiredMixin,CreateView):
     model = Task
     fields = '__all__'
     success_url = reverse_lazy('taskslist')
 
-class TaskUpdate(UpdateView):
+class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
     fields = '__all__'
     success_url =  reverse_lazy('taskslist')
 
-class DeleteView(DeleteView):
+class DeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task'
     success_url =  reverse_lazy('taskslist')
