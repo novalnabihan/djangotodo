@@ -23,18 +23,29 @@ class TaskList(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'task_list'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['task_list'] = context['task_list'].filter(user=self.request.user)
+        context['count'] = context['task_list'].filter(complete=False).count()
+        return context
+    
+        
 class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'task'
     
 class TaskCreate(LoginRequiredMixin,CreateView):
     model = Task
-    fields = '__all__'
+    fields = [ 'title', 'description', 'complete']
     success_url = reverse_lazy('taskslist')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user  # Associate task with the logged-in user
+        return super(TaskCreate, self).form_valid(form)
 
 class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
-    fields = '__all__'
+    fields = [ 'title', 'description', 'complete']
     success_url =  reverse_lazy('taskslist')
 
 class DeleteView(LoginRequiredMixin, DeleteView):
