@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -21,9 +21,22 @@ class CustomLoginView(LoginView):
         return reverse_lazy('taskslist')
     
 class RegisterPage(FormView):
-    template_name = 'base/register.html'
+    template_name = 'tasks/register.html'
     form_class = UserCreationForm
     success_url = reverse_lazy('taskslist')
+
+    #login jika sudah register
+    def form_valid(self, form):
+        user = form.save()
+        if user is not None:
+            login(self.request, user)
+        return super(RegisterPage, self).form_valid(form)
+    
+    # redirect jika user sudah login
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('taskslist')
+        return super(RegisterPage, self).get(*args, **kwargs)
 
 class TaskList(LoginRequiredMixin, ListView):
     model = Task
